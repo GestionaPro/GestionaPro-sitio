@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planes y Precios — GestionaPro</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #F4F6FB;
+    color: #0B1E3D;
+  }
+  .header {
+    background: linear-gradient(135deg, #0B1E3D, #2F6FED);
+    color: #fff;
+    text-align: center;
+    padding: 60px 20px 80px;
+  }
+  .header h1 { font-size: 34px; font-weight: 700; }
+  .header h1 span { color: #FF7A50; }
+  .header p { font-size: 17px; color: #C7D3EC; margin-top: 12px; max-width: 520px; margin-left: auto; margin-right: auto; }
+
+  .contenedor { max-width: 1080px; margin: -50px auto 0; padding: 0 20px 60px; }
+
+  .planes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+  .plan {
+    background: #fff;
+    border-radius: 18px;
+    padding: 32px 26px;
+    box-shadow: 0 10px 30px rgba(11,30,61,0.10);
+    display: flex;
+    flex-direction: column;
+  }
+  .plan.destacado { border: 3px solid #FF5F3D; position: relative; }
+  .plan.destacado::before {
+    content: "MÁS ELEGIDO";
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: #FF5F3D; color: #fff; font-size: 12px; font-weight: 700;
+    padding: 5px 14px; border-radius: 20px; letter-spacing: 1px;
+  }
+  .plan-nombre { font-size: 22px; font-weight: 700; }
+  .plan-frase { color: #6b7280; font-size: 14px; margin-top: 4px; margin-bottom: 20px; }
+  .plan-lista { list-style: none; flex: 1; }
+  .plan-lista li { padding: 7px 0; font-size: 15px; display: flex; align-items: flex-start; gap: 8px; }
+  .plan-lista li::before { content: "✓"; color: #10B981; font-weight: 700; }
+  .plan-boton {
+    margin-top: 24px; display: block; text-align: center; text-decoration: none;
+    background: #0B1E3D; color: #fff; padding: 13px; border-radius: 10px; font-weight: 700;
+  }
+  .plan.destacado .plan-boton { background: #FF5F3D; }
+
+  .footer-nota { text-align: center; margin-top: 40px; color: #6b7280; font-size: 14.5px; }
+  .footer-nota a { color: #2F6FED; font-weight: 600; text-decoration: none; }
+
+  .bloque-final {
+    background: #0B1E3D; color: #fff; text-align: center; padding: 50px 20px; margin-top: 20px; border-radius: 18px;
+  }
+  .bloque-final h2 { font-size: 24px; margin-bottom: 10px; }
+  .bloque-final p { color: #B9C4DC; margin-bottom: 24px; }
+  .bloque-final a {
+    display: inline-block; background: #25D366; color: #fff; padding: 14px 32px;
+    border-radius: 10px; font-weight: 700; text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Gestiona<span>Pro</span></h1>
+  <p>Planes claros, sin sorpresas. Elige lo que tu escuela o club necesita hoy — puedes subir de plan cuando quieras.</p>
+</div>
+
+<div class="contenedor">
+  <div class="planes">
+
+    <div class="plan">
+      <div class="plan-nombre">🥉 Básica</div>
+      <div class="plan-frase">Lo esencial para no perder el control</div>
+      <ul class="plan-lista">
+        <li>Dashboard general</li>
+        <li>Gestión de alumnos</li>
+        <li>Control de asistencia</li>
+        <li>Registro de pagos</li>
+        <li>Cartera y cobros pendientes</li>
+        <li>Cobros masivos</li>
+      </ul>
+      <a href="https://wa.me/573118273784?text=Hola,%20quiero%20información%20del%20plan%20Básica%20de%20GestionaPro" class="plan-boton">Quiero este plan</a>
+    </div>
+
+    <div class="plan destacado">
+      <div class="plan-nombre">🥈 Pro</div>
+      <div class="plan-frase">Para manejar el dinero de tu escuela de verdad</div>
+      <ul class="plan-lista">
+        <li>Todo lo de Básica</li>
+        <li>Inventario y ventas</li>
+        <li>Control de gastos</li>
+        <li>Caja (efectivo y transferencias)</li>
+        <li>Nómina de empleados</li>
+      </ul>
+      <a href="https://wa.me/573118273784?text=Hola,%20quiero%20información%20del%20plan%20Pro%20de%20GestionaPro" class="plan-boton">Quiero este plan</a>
+    </div>
+
+    <div class="plan">
+      <div class="plan-nombre">🥇 Todo</div>
+      <div class="plan-frase">La escuela completa, con datos y crecimiento</div>
+      <ul class="plan-lista">
+        <li>Todo lo de Pro</li>
+        <li>Competencias y medallero</li>
+        <li>Reportes financieros y de asistencia</li>
+        <li>Roles y permisos configurables</li>
+        <li>Personalización de marca (logo y colores)</li>
+      </ul>
+      <a href="https://wa.me/573118273784?text=Hola,%20quiero%20información%20del%20plan%20Todo%20de%20GestionaPro" class="plan-boton">Quiero este plan</a>
+    </div>
+
+  </div>
+
+  <p class="footer-nota">¿No sabes cuál elegir? <a href="https://wa.me/573118273784">Escríbenos y te ayudamos a decidir</a>, sin compromiso.</p>
+
+  <div class="bloque-final">
+    <h2>Pruébala antes de decidir</h2>
+    <p>Tenemos una versión de demostración con datos de ejemplo para que veas cómo funciona todo, sin usar información real de tu escuela.</p>
+    <a href="https://wa.me/573118273784?text=Hola,%20quiero%20probar%20la%20demo%20de%20GestionaPro">📲 Pedir acceso a la demo</a>
+  </div>
+</div>
+
+</body>
+</html>
