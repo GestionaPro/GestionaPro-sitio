@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GestionaPro</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    overflow: hidden; background: #0B1E3D;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  iframe { width: 100%; height: 100%; border: none; display: block; }
+
+  #cargando {
+    position: fixed; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: #0B1E3D; color: #F4F6FB; z-index: 10;
+  }
+  .spinner {
+    width: 44px; height: 44px; border: 4px solid rgba(244,246,251,0.25);
+    border-top-color: #FF5F3D; border-radius: 50%;
+    animation: girar 0.8s linear infinite; margin-bottom: 16px;
+  }
+  @keyframes girar { to { transform: rotate(360deg); } }
+  #cargando p { font-size: 15px; color: #B9C4DC; margin: 0; }
+
+  #pantallaCodigo {
+    position: fixed; inset: 0; display: none; flex-direction: column;
+    align-items: center; justify-content: center; padding: 24px;
+    background: #0B1E3D; color: #F4F6FB; text-align: center; z-index: 20;
+  }
+  #pantallaCodigo h1 { font-size: 22px; margin: 0 0 6px 0; }
+  #pantallaCodigo p.sub { font-size: 14px; color: #B9C4DC; margin: 0 0 24px 0; }
+  #inputCodigo {
+    width: 100%; max-width: 280px; padding: 14px 16px; font-size: 16px;
+    border: none; border-radius: 12px; text-align: center;
+    text-transform: uppercase; margin-bottom: 12px; box-sizing: border-box;
+  }
+  #btnEntrar {
+    width: 100%; max-width: 280px; padding: 14px; font-size: 16px; font-weight: bold;
+    border: none; border-radius: 12px; background: #FF5F3D; color: #fff; cursor: pointer;
+  }
+  #btnEntrar:disabled { opacity: 0.6; }
+  #errorCodigo { color: #FF8B7A; font-size: 13px; min-height: 18px; margin-top: 12px; }
+
+  #btnCambiarEscuela {
+    position: fixed; bottom: 14px; left: 14px; z-index: 999999;
+    background: rgba(255,255,255,0.12); color: #F4F6FB; text-decoration: none;
+    font-size: 0.72rem; padding: 7px 12px; border-radius: 20px; display: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="cargando">
+  <div class="spinner"></div>
+  <p>Cargando GestionaPro...</p>
+</div>
+
+<div id="pantallaCodigo">
+  <h1>🛼 GestionaPro</h1>
+  <p class="sub">Escribe el código de acceso de tu escuela</p>
+  <input type="text" id="inputCodigo" placeholder="CÓDIGO DE ESCUELA" autocapitalize="characters">
+  <button id="btnEntrar" onclick="intentarEntrar()">Entrar</button>
+  <div id="errorCodigo"></div>
+</div>
+
+<iframe id="appFrame" style="display:none;"></iframe>
+
+<a href="#" id="btnCambiarEscuela" onclick="cambiarEscuela(); return false;">¿No es tu escuela? Cambiar</a>
+
+<script>
+  // ⚠️ Reemplaza esto por la URL /exec real de tu proyecto "Directorio-GestionaPro" una vez
+  // lo despliegues (Implementar -> Nueva implementación -> Aplicación web).
+  var DIRECTORIO_URL = 'https://script.google.com/macros/s/AKfycbxDRAvJa6nmC2xgWklhMRIiI1gxRUc5vh9dSlz7eoWTzOZeJpkBJcka9ssnp_9-aJ8Wog/exec';
+
+  var CLAVE_CODIGO = 'gp_codigo';
+  var CLAVE_URL = 'gp_url';
+
+  function mostrarPantallaCodigo(mensajeError) {
+    document.getElementById('cargando').style.display = 'none';
+    document.getElementById('appFrame').style.display = 'none';
+    document.getElementById('btnCambiarEscuela').style.display = 'none';
+    document.getElementById('pantallaCodigo').style.display = 'flex';
+    document.getElementById('errorCodigo').innerText = mensajeError || '';
+    document.getElementById('inputCodigo').focus();
+  }
+
+  function cargarApp(url) {
+    var frame = document.getElementById('appFrame');
+    frame.onload = function () {
+      document.getElementById('cargando').style.display = 'none';
+    };
+    frame.src = url;
+    frame.style.display = 'block';
+    document.getElementById('pantallaCodigo').style.display = 'none';
+    document.getElementById('btnCambiarEscuela').style.display = 'block';
+  }
+
+  function validarCodigo(codigo, esSilencioso) {
+    fetch(DIRECTORIO_URL + '?codigo=' + encodeURIComponent(codigo))
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.ok && data.url) {
+          localStorage.setItem(CLAVE_CODIGO, codigo);
+          localStorage.setItem(CLAVE_URL, data.url);
+          cargarApp(data.url);
+        } else {
+          localStorage.removeItem(CLAVE_CODIGO);
+          localStorage.removeItem(CLAVE_URL);
+          mostrarPantallaCodigo(data.mensaje || 'Código no válido.');
+        }
+      })
+      .catch(function () {
+        if (esSilencioso) {
+          // Sin internet o el Directorio no respondió: si ya había una URL guardada,
+          // deja entrar con esa mientras se recupera la conexión, en vez de trabar al usuario.
+          var urlGuardada = localStorage.getItem(CLAVE_URL);
+          if (urlGuardada) { cargarApp(urlGuardada); return; }
+        }
+        mostrarPantallaCodigo('No se pudo conectar. Revisa tu internet e intenta de nuevo.');
+      });
+  }
+
+  function intentarEntrar() {
+    var codigo = document.getElementById('inputCodigo').value.trim().toUpperCase();
+    if (!codigo) {
+      document.getElementById('errorCodigo').innerText = 'Escribe tu código de escuela.';
+      return;
+    }
+    document.getElementById('btnEntrar').disabled = true;
+    document.getElementById('errorCodigo').innerText = '';
+    validarCodigo(codigo, false);
+    document.getElementById('btnEntrar').disabled = false;
+  }
+
+  function cambiarEscuela() {
+    localStorage.removeItem(CLAVE_CODIGO);
+    localStorage.removeItem(CLAVE_URL);
+    mostrarPantallaCodigo('');
+  }
+
+  document.getElementById('inputCodigo').addEventListener('keydown', function (ev) {
+    if (ev.key === 'Enter') intentarEntrar();
+  });
+
+  // Al cargar: si ya hay un código guardado en este dispositivo, revalida en segundo plano
+  // (por si el administrador lo desactivó) y entra directo sin volver a preguntar.
+  var codigoGuardado = localStorage.getItem(CLAVE_CODIGO);
+  if (codigoGuardado) {
+    validarCodigo(codigoGuardado, true);
+  } else {
+    mostrarPantallaCodigo('');
+  }
+</script>
+
+</body>
+</html>
