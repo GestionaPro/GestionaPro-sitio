@@ -2,6 +2,7 @@
   "name": "GestionaPro",
   "short_name": "GestionaPro",
   "description": "Gestión inteligente para escuelas y clubes deportivos",
+  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
