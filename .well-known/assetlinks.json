@@ -1,1 +1,8 @@
-
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.gestionapro.twa",
+        "sha256_cert_fingerprints": ["26:0E:E5:ED:03:09:89:F7:96:AB:B9:E9:9B:39:1A:2C:24:16:22:02:83:CB:6D:CE:62:62:83:C4:71:B4:AD:E2"]
+      }
+    }]
