@@ -84,7 +84,7 @@
 
   <div style="margin-top:26px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.15); width:100%; max-width:280px;">
     <p style="font-size:0.8rem; color:#B9C4DC; margin:0 0 10px 0;">¿No eres cliente todavía?</p>
-    <a href="https://gestionapro.github.io/DEMO/" style="display:block; width:100%; padding:12px; font-size:0.95rem; font-weight:bold; border:1px solid rgba(255,255,255,0.4); border-radius:12px; color:#F4F6FB; text-decoration:none; box-sizing:border-box;">🧪 Probar la Demo</a>
+    <a href="https://gestionapro.github.io/DEMO/" onclick="entrarDemo(); return false;" style="display:block; width:100%; padding:12px; font-size:0.95rem; font-weight:bold; border:1px solid rgba(255,255,255,0.4); border-radius:12px; color:#F4F6FB; text-decoration:none; box-sizing:border-box;">🧪 Probar la Demo</a>
   </div>
 </div>
 
@@ -117,6 +117,15 @@
     frame.src = url;
     frame.style.display = 'block';
     document.getElementById('pantallaCodigo').style.display = 'none';
+    document.getElementById('btnCambiarEscuela').style.display = 'flex';
+  }
+
+  // Modo demo: abre la demo DENTRO del portal (no navega fuera) y NO guarda el código, para que
+  // el botón ⇄ siempre permita volver a la pantalla de código de escuela.
+  var enModoDemo = false;
+  function entrarDemo() {
+    enModoDemo = true;
+    cargarApp('https://gestionapro.github.io/DEMO/');
   }
 
   function validarCodigo(codigo, esSilencioso) {
@@ -161,7 +170,8 @@
     // (antes era una franja de texto grande siempre visible; ahora es un
     // ícono pequeño, así que un toque accidental es menos probable, pero
     // igual conviene confirmar antes de cerrar la sesión de la escuela).
-    if (!confirm('¿Salir de esta escuela y volver a pedir el código?')) return;
+    if (!enModoDemo && !confirm('¿Salir de esta escuela y volver a pedir el código?')) return;
+    enModoDemo = false;
     localStorage.removeItem(CLAVE_CODIGO);
     localStorage.removeItem(CLAVE_URL);
     mostrarPantallaCodigo('');
